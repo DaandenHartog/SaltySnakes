@@ -1,10 +1,9 @@
-﻿//Author: Richard Pieterse
+//Author: Richard Pieterse
 //Date: 16 May 2013
 //Email: Merrik44@live.com
 
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace GamepadInput
 {
@@ -33,38 +32,6 @@ namespace GamepadInput
         {
             KeyCode code = GetKeycode(button, controlIndex);
             return Input.GetKey(code);
-        }
-
-        public static int IndexToInt(Index index)
-        {
-            if (index == Index.Any)
-                return 0;
-            else if (index == Index.One)
-                return 1;
-            else if (index == Index.Two)
-                return 2;
-            else if (index == Index.Three)
-                return 3;
-            else if (index == Index.Four)
-                return 4;
-            else
-                return 0;
-        }
-
-        public static Index IntToIndex(int index)
-        {
-            if (index == 0)
-                return Index.Any;
-            else if (index == 1)
-                return Index.One;
-            else if (index == 2)
-                return Index.Two;
-            else if (index == 3)
-                return Index.Three;
-            else if (index == 4)
-                return Index.Four;
-            else
-                return Index.Any;
         }
 
         /// <summary>
@@ -227,21 +194,6 @@ namespace GamepadInput
                     break;
             }
             return KeyCode.None;
-        }
-
-        public static bool GetKeyboardKey(KeyCode keyCode)
-        {
-            return Input.GetKey(keyCode);
-        }
-
-        public static bool GetKeyboardKeyDown(KeyCode keyCode)
-        {
-            return Input.GetKeyDown(keyCode);
-        }
-
-        public static bool GetKeyboardKeyUp(KeyCode keyCode)
-        {
-            return Input.GetKeyUp(keyCode);
         }
 
         public static GamepadState GetState(Index controlIndex, bool raw = false)
