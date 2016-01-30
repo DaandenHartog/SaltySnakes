@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class UIElementJiggle : MonoBehaviour {
+public class UIElementJiggle : MonoBehaviour
+{
+    [SerializeField]
+    private float angle = 30f;
+    [SerializeField]
+    private float speed = 1f;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    private IEnumerator Start()
+    {
+        while (true)
+        {
+            iTween.RotateTo(gameObject, new Vector3(0, 0, angle), speed);
+            yield return new WaitForSeconds(speed);
+            angle = -angle;
+        }
+    }
+
 }
