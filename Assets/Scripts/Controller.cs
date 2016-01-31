@@ -12,28 +12,30 @@ public class Controller : MonoBehaviour {
 	private void Awake () {
         checkpointController = GetComponent<CheckpointController>();
 
-        for (int i = 0; i < GlobalSelectedCharacters.instance.chosenCharacters.Length; i++ )
-        {
-            GameObject racerObject = GameObject.Find("snail" + i);
+        //for (int i = 0; i < GlobalSelectedCharacters.instance.chosenCharacters.Length; i++ )
+        //{
+        //    GameObject racerObject = GameObject.Find("snail" + i);
 
-            if (GlobalSelectedCharacters.instance.chosenCharacters[i] == GlobalSelectedCharacters.CharacterType.None)
-            {
-                GameObject.Destroy(racerObject);
-                continue;
-            }
+        //    if (GlobalSelectedCharacters.instance.chosenCharacters[i] == GlobalSelectedCharacters.CharacterType.None)
+        //    {
+        //        GameObject.Destroy(racerObject);
+        //        continue;
+        //    }
 
-            Racer racer = racerObject.GetComponent<Racer>();
-            racer.name = GlobalSelectedCharacters.instance.chosenCharacters[i].ToString();
+        //    Racer racer = racerObject.GetComponent<Racer>();
+        //    racer.name = GlobalSelectedCharacters.instance.chosenCharacters[i].ToString();
 
-            racers.Add(racer);
-                
-        }
+        //    racer.Initialize(this, i + 1);
+        //    racersData.Add(new RacerData(racer));
 
-        foreach (Racer racer in racers)
-        {
-            racer.Initialize(this);
-            racersData.Add(new RacerData(racer));
-        }
+        //    racers.Add(racer);                
+        //}
+
+        GameObject racerObject = GameObject.Find("snail0");
+        Racer racer = racerObject.GetComponent<Racer>();
+        racer.name = "Daan";
+        racer.Initialize(this, 1);
+        racersData.Add(new RacerData(racer));
 
         StartRace();
 	}

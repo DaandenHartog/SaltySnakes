@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GamepadInput;
 
 public class Racer : MonoBehaviour {
 
@@ -31,8 +32,11 @@ public class Racer : MonoBehaviour {
 
     private IEnumerator animation;
 
-    public void Initialize(Controller controller) {
+    int playerID = 0;
+
+    public void Initialize(Controller controller, int playerID) {
         this.controller = controller;
+        this.playerID = playerID;
 
         body0 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "0");
         body1 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "1");
@@ -81,11 +85,38 @@ public class Racer : MonoBehaviour {
     private void DetectInput() {
         input = Vector2.zero;
 
-        if (Input.GetKey(KeyCode.W)) input += Vector2.up;
-        if (Input.GetKey(KeyCode.S)) input += Vector2.down;
+        switch(playerID)
+        {
+            default:
+            case 1:
+                if (GamePad.GetButtonDown(GamePad.Button.LeftShoulder, GamePad.Index.One))
+                    input += Vector2.up;
+                input = new Vector2(GamePad.GetAxis(GamePad.Axis.LeftStick, GamePad.Index.One).x, input.y);
+                break;
+            case 2:
+                if (GamePad.GetButtonDown(GamePad.Button.RightShoulder, GamePad.Index.One))
+                    input += Vector2.up;
+                input = new Vector2(GamePad.GetAxis(GamePad.Axis.RightStick, GamePad.Index.One).x, input.y);
+                break;
+            case 3:
+                if (GamePad.GetButtonDown(GamePad.Button.LeftShoulder, GamePad.Index.Two))
+                    input += Vector2.up;
+                input = new Vector2(GamePad.GetAxis(GamePad.Axis.LeftStick, GamePad.Index.Two).x, input.y);
+                break;
+            case 4:
+                if (GamePad.GetButtonDown(GamePad.Button.RightShoulder, GamePad.Index.Two))
+                    input += Vector2.up;
+                input = new Vector2(GamePad.GetAxis(GamePad.Axis.RightStick, GamePad.Index.Two).x, input.y);
+                break;
+        }
 
-        if (Input.GetKey(KeyCode.A)) input += Vector2.left;
-        if (Input.GetKey(KeyCode.D)) input += Vector2.right;
+        //if (Input.GetKey(KeyCode.W)) input += Vector2.up;
+        //if (Input.GetKey(KeyCode.S)) input += Vector2.down;
+
+        //if (Input.GetKey(KeyCode.A)) input += Vector2.left;
+        //if (Input.GetKey(KeyCode.D)) input += Vector2.right;
+
+        
     }
 
     private void DetectValues() {
@@ -93,8 +124,14 @@ public class Racer : MonoBehaviour {
         if (input.y == -1) currentVelocity = AddVelocity(currentVelocity, maxBackwardVelocity, timeBackwardVelocity, -1);
         if (input.y == 0) currentVelocity = DecreaseVelocity(currentVelocity);
 
-        if (input.x == 1) currentRotation = AddVelocity(currentRotation, maxRotation, timeRotation, -1);
-        if (input.x == -1) currentRotation = AddVelocity(currentRotation, maxRotation, timeRotation);
+        //if (input.x == 1) currentRotation = AddVelocity(currentRotation, maxRotation, timeRotation, -1);
+        //if (input.x == -1) currentRotation = AddVelocity(currentRotation, maxRotation, timeRotation);
+        if (input.x != 0)
+        {
+            int direction = 1;
+            if (input.x > 0) direction = -1;
+            currentRotation = AddVelocity(currentRotation, maxRotation * currentRotation, timeRotation, direction);
+        }
         if (input.x == 0) currentRotation = DecreaseRotation(currentRotation);
     }
 
