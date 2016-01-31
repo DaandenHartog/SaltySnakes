@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GamepadInput;
+using System;
 
 public class MainMenuView : MonoBehaviour
 {
@@ -22,6 +24,22 @@ public class MainMenuView : MonoBehaviour
     private void ShowCharacterSelection()
     {
         ShowScreen(MenuScreen, false);
+    }
+
+    private IEnumerator StartCharacterCountDown()
+    {
+
+        while (true)
+        {
+            CheckInputs();
+            yield return new WaitForEndOfFrame();
+        }
+
+    }
+
+    private void CheckInputs()
+    {
+
     }
 
     private void ShowScreen(GameObject rt, bool enabled)
