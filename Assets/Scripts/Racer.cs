@@ -6,6 +6,8 @@ public class Racer : MonoBehaviour {
 
     [HideInInspector]
     public List<CheckPoint> checkpoints = new List<CheckPoint>();
+    [HideInInspector]
+    public string name;
 
     private Controller controller;
 
@@ -29,8 +31,9 @@ public class Racer : MonoBehaviour {
 
     private IEnumerator animation;
 
-    public void Initialize(Controller controller, string name = "Thom") {
+    public void Initialize(Controller controller, string name = "Daan") {
         this.controller = controller;
+        this.name = name;
 
         body0 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "0");
         body1 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "1");
