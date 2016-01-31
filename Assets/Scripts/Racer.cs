@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class Racer : MonoBehaviour {
 
-    private List<CheckPoint> checkpoints = new List<CheckPoint>();
+    [HideInInspector]
+    public List<CheckPoint> checkpoints = new List<CheckPoint>();
 
     private Controller controller;
 
@@ -21,6 +22,7 @@ public class Racer : MonoBehaviour {
     private float timeRotation = 1f;
 
     private bool canRace = true;
+    private bool canControl = true;
 
     public void Initialize(Controller controller) {
         this.controller = controller;
@@ -38,10 +40,13 @@ public class Racer : MonoBehaviour {
     }
 	
 	private void Update () {
-        if (canRace)
-            DetectInput();
+        if (canControl)
+        {
+            if (canRace)
+                DetectInput();
 
-        DetectValues();
+            DetectValues();
+        }
 	}
 
     private void DetectInput() {
