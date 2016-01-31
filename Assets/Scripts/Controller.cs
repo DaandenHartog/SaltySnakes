@@ -14,7 +14,7 @@ public class Controller : MonoBehaviour {
 
         foreach (Racer racer in racers)
         {
-            racer.Initialize(checkpointController);
+            racer.Initialize(this);
             racersData.Add(new RacerData(racer));
         }
 
@@ -28,17 +28,41 @@ public class Controller : MonoBehaviour {
 
     private void EndRace() {
         foreach (Racer racer in racers)
-            racer.StartRace();
+            racer.StopRace();
     }
 
-    public void FinishedLap() {
+    public bool CheckRound(List<CheckPoint> list)
+    {
+        return checkpointController.CheckRound(list);
+    }
 
+    public void FinishedLap(Racer racer) {
+        RacerData data = GetRacerData(racer);
+
+        data.round++;
+
+        Debug.Log("Calling finished lap. Current round: " + data.round);
+
+        if(data.round >= 2)
+        {
+            EndRace();
+            return;
+        }
+    }
+
+    private RacerData GetRacerData(Racer racer)
+    {
+        foreach (RacerData data in racersData)
+            if (data.racer == racer)
+                return data;
+
+        return null;
     }
 
     private class RacerData
     {
         public Racer racer;
-        public int round;
+        public int round = 1;
 
         public RacerData(Racer racer)
         {

@@ -6,7 +6,7 @@ public class Racer : MonoBehaviour {
 
     private List<CheckPoint> checkpoints = new List<CheckPoint>();
 
-    private CheckpointController roundController;
+    private Controller controller;
 
     private Rigidbody2D rigidBody;
 
@@ -22,8 +22,8 @@ public class Racer : MonoBehaviour {
 
     private bool canRace = true;
 
-    public void Initialize(CheckpointController roundController) {
-        this.roundController = roundController;
+    public void Initialize(Controller controller) {
+        this.controller = controller;
 
         rigidBody = GetComponent<Rigidbody2D>();
     }
@@ -33,6 +33,7 @@ public class Racer : MonoBehaviour {
     }
 
     public void StopRace() {
+        input = Vector2.zero;
         canRace = false;
     }
 	
@@ -124,17 +125,15 @@ public class Racer : MonoBehaviour {
             checkpoints.Remove(checkPoint);
             
         checkpoints.Add(checkPoint);
-
-        Debug.Log("Added " + checkPoint.name);
     }
 
     private void CheckForFinish()
     {
-        Debug.Log("Ran over the finish");
-
-        if (!roundController.CheckRound(checkpoints))
+        if (!controller.CheckRound(checkpoints))
             return;
 
-        Debug.Log("Cleared the track!");
+        checkpoints = new List<CheckPoint>();
+        controller.FinishedLap(this);
+        
     }
 }
