@@ -12,6 +12,15 @@ public class Controller : MonoBehaviour {
 	private void Awake () {
         checkpointController = GetComponent<CheckpointController>();
 
+        // Get Racer variables
+        // Instantiate prefab at points
+        // Put correct sprites on these prefabs
+
+
+
+
+
+
         foreach (Racer racer in racers)
         {
             racer.Initialize(this);

@@ -11,6 +11,9 @@ public class Racer : MonoBehaviour {
 
     private Rigidbody2D rigidBody;
 
+    private SpriteRenderer body;
+    private Sprite body0, body1;
+
     private Vector2 input;
 
     private float currentVelocity;
@@ -24,19 +27,43 @@ public class Racer : MonoBehaviour {
     private bool canRace = true;
     private bool canControl = true;
 
-    public void Initialize(Controller controller) {
+    private IEnumerator animation;
+
+    public void Initialize(Controller controller, string name = "Thom") {
         this.controller = controller;
+
+        body0 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "0");
+        body1 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "1");
+        body = transform.FindChild("body").GetComponent<SpriteRenderer>();
+        body.sprite = body0;
+
+        transform.FindChild("shell").GetComponent<SpriteRenderer>().sprite = ResourceLoader._instance.GetAsset<Sprite>("shell" + name);
+        transform.FindChild("legs").FindChild("legLeft").GetComponent<SpriteRenderer>().sprite = ResourceLoader._instance.GetAsset<Sprite>("leg" + name + "Left");
+        transform.FindChild("legs").FindChild("legRight").GetComponent<SpriteRenderer>().sprite = ResourceLoader._instance.GetAsset<Sprite>("leg" + name + "Right");
 
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
     public void StartRace() {
         canRace = true;
+
+        animation = AnimateBody(body0, body1);
+        StartCoroutine(animation);
     }
 
     public void StopRace() {
+        StopCoroutine(animation);
         input = Vector2.zero;
         canRace = false;
+    }
+
+    private IEnumerator AnimateBody(Sprite current, Sprite next)
+    {
+        yield return new WaitForSeconds(1f);
+
+        body.sprite = next;
+        animation = AnimateBody(next, current);
+        StartCoroutine(animation);
     }
 	
 	private void Update () {
@@ -123,6 +150,35 @@ public class Racer : MonoBehaviour {
 
         if (collider.gameObject.tag == "finish")
             CheckForFinish();
+
+        if (collider.gameObject.tag == "oil")
+            AddSpill();
+    }
+
+    private void AddSpill() {
+        canControl = false;
+
+        StartCoroutine(Spill());
+    }
+
+    private IEnumerator Spill() {
+
+        float timer = 0f;
+        float totalVelocity = 5f;
+        
+        while(true)
+        {
+            timer += Time.deltaTime * 1.5f;
+            currentVelocity = totalVelocity - timer;
+
+            if(currentVelocity <= 0)
+                break;
+
+            yield return null;
+        }
+
+        currentVelocity = 0f;
+        canControl = true;
     }
 
     private void AddCheck(CheckPoint checkPoint) {
