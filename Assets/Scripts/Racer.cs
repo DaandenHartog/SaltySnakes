@@ -31,9 +31,8 @@ public class Racer : MonoBehaviour {
 
     private IEnumerator animation;
 
-    public void Initialize(Controller controller, string name = "Daan") {
+    public void Initialize(Controller controller) {
         this.controller = controller;
-        this.name = name;
 
         body0 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "0");
         body1 = ResourceLoader._instance.GetAsset<Sprite>("body" + name + "1");
@@ -193,8 +192,12 @@ public class Racer : MonoBehaviour {
 
     private void CheckForFinish()
     {
+        Debug.Log("Checking finish..");
+
         if (!controller.CheckRound(checkpoints))
             return;
+
+        Debug.Log("Applied finish");
 
         checkpoints = new List<CheckPoint>();
         controller.FinishedLap(this);

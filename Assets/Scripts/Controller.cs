@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Controller : MonoBehaviour {
 
-    public List<Racer> racers;
+    public List<Racer> racers = new List<Racer>();
     private List<RacerData> racersData = new List<RacerData>();
 
     private CheckpointController checkpointController;
@@ -12,14 +12,22 @@ public class Controller : MonoBehaviour {
 	private void Awake () {
         checkpointController = GetComponent<CheckpointController>();
 
-        // Get Racer variables
-        // Instantiate prefab at points
-        // Put correct sprites on these prefabs
+        for (int i = 0; i < GlobalSelectedCharacters.instance.chosenCharacters.Length; i++ )
+        {
+            GameObject racerObject = GameObject.Find("snail" + i);
 
+            if (GlobalSelectedCharacters.instance.chosenCharacters[i] == GlobalSelectedCharacters.CharacterType.None)
+            {
+                GameObject.Destroy(racerObject);
+                continue;
+            }
 
+            Racer racer = racerObject.GetComponent<Racer>();
+            racer.name = GlobalSelectedCharacters.instance.chosenCharacters[i].ToString();
 
-
-
+            racers.Add(racer);
+                
+        }
 
         foreach (Racer racer in racers)
         {
