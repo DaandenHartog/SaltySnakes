@@ -12,30 +12,67 @@ public class Controller : MonoBehaviour {
 	private void Awake () {
         checkpointController = GetComponent<CheckpointController>();
 
-        //for (int i = 0; i < GlobalSelectedCharacters.instance.chosenCharacters.Length; i++ )
-        //{
-        //    GameObject racerObject = GameObject.Find("snail" + i);
+        for (int i = 0; i < GlobalSelectedCharacters.instance.chosenCharacters.Length; i++)
+        {
+            GameObject racerObject = GameObject.Find("snail" + i);
 
-        //    if (GlobalSelectedCharacters.instance.chosenCharacters[i] == GlobalSelectedCharacters.CharacterType.None)
-        //    {
-        //        GameObject.Destroy(racerObject);
-        //        continue;
-        //    }
+            if (GlobalSelectedCharacters.instance.chosenCharacters[i] == GlobalSelectedCharacters.CharacterType.None)
+            {
+                GameObject coverview = GameObject.Instantiate(ResourceLoader._instance.GetAsset<GameObject>("OverviewCamera"));
+                Camera cCamera = coverview.GetComponent<Camera>();
 
-        //    Racer racer = racerObject.GetComponent<Racer>();
-        //    racer.name = GlobalSelectedCharacters.instance.chosenCharacters[i].ToString();
+                switch (i)
+                {
+                    case 0:
+                        cCamera.rect = new Rect(0, 0.5f, 0.5f, 0.5f);
+                        break;
+                    case 1:
+                        cCamera.rect = new Rect(0.5f, 0.5f, 0.5f, 0.5f);
+                        break;
+                    case 2:
+                        cCamera.rect = new Rect(0, 0, 0.5f, 0.5f);
+                        break;
+                    case 3:
+                        cCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
+                        break;
+                }
 
-        //    racer.Initialize(this, i + 1);
-        //    racersData.Add(new RacerData(racer));
+                GameObject.Destroy(racerObject);
+                continue;
+            }
 
-        //    racers.Add(racer);                
-        //}
+            Racer racer = racerObject.GetComponent<Racer>();
+            racer.name = GlobalSelectedCharacters.instance.chosenCharacters[i].ToString();
 
-        GameObject racerObject = GameObject.Find("snail0");
-        Racer racer = racerObject.GetComponent<Racer>();
-        racer.name = "Daan";
-        racer.Initialize(this, 1);
-        racersData.Add(new RacerData(racer));
+            racer.Initialize(this, i + 1);
+            racersData.Add(new RacerData(racer));
+
+            racers.Add(racer);
+        }
+
+        //GameObject racerObject = GameObject.Find("snail0");
+        //Racer racer = racerObject.GetComponent<Racer>();
+        //racer.name = "Daan";
+        //racer.Initialize(this, 1);
+        //racersData.Add(new RacerData(racer));
+
+        //GameObject racerObject1 = GameObject.Find("snail1");
+        //Racer racer1 = racerObject1.GetComponent<Racer>();
+        //racer1.name = "Inge";
+        //racer1.Initialize(this, 2);
+        //racersData.Add(new RacerData(racer1));
+
+        //GameObject racerObject2 = GameObject.Find("snail2");
+        //Racer racer2 = racerObject2.GetComponent<Racer>();
+        //racer2.name = "Saskia";
+        //racer2.Initialize(this, 3);
+        //racersData.Add(new RacerData(racer2));
+
+        //GameObject racerObject3 = GameObject.Find("snail3");
+        //Racer racer3 = racerObject3.GetComponent<Racer>();
+        //racer3.name = "Thom";
+        //racer3.Initialize(this, 4);
+        //racersData.Add(new RacerData(racer3));
 
         StartRace();
 	}

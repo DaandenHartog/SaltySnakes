@@ -20,8 +20,8 @@ public class Racer : MonoBehaviour {
     private Vector2 input;
 
     private float currentVelocity;
-    private float maxForwardVelocity = 4f, maxBackwardVelocity = 2f;
-    private float timeForwardVelocity = 0.5f, timeBackwardVelocity = 0.3f;
+    private float maxForwardVelocity = 0.5f, maxBackwardVelocity = 2f;
+    private float timeForwardVelocity = 0.01f, timeBackwardVelocity = 0.01f;
 
     private float currentRotation;
     private float maxRotation = 40f;
@@ -47,6 +47,7 @@ public class Racer : MonoBehaviour {
         transform.FindChild("legs").FindChild("legLeft").GetComponent<SpriteRenderer>().sprite = ResourceLoader._instance.GetAsset<Sprite>("leg" + name + "Left");
         transform.FindChild("legs").FindChild("legRight").GetComponent<SpriteRenderer>().sprite = ResourceLoader._instance.GetAsset<Sprite>("leg" + name + "Right");
 
+        Debug.Log(name + " looking for rb");
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -91,22 +92,22 @@ public class Racer : MonoBehaviour {
             case 1:
                 if (GamePad.GetButtonDown(GamePad.Button.LeftShoulder, GamePad.Index.One))
                     input += Vector2.up;
-                input = new Vector2(GamePad.GetAxis(GamePad.Axis.LeftStick, GamePad.Index.One).x, input.y);
+                input = new Vector2(Input.GetAxis("Controller1_LeftAxis"), input.y);
                 break;
             case 2:
                 if (GamePad.GetButtonDown(GamePad.Button.RightShoulder, GamePad.Index.One))
                     input += Vector2.up;
-                input = new Vector2(GamePad.GetAxis(GamePad.Axis.RightStick, GamePad.Index.One).x, input.y);
+                input = new Vector2(Input.GetAxis("Controller1_RightAxis"), input.y);
                 break;
             case 3:
                 if (GamePad.GetButtonDown(GamePad.Button.LeftShoulder, GamePad.Index.Two))
                     input += Vector2.up;
-                input = new Vector2(GamePad.GetAxis(GamePad.Axis.LeftStick, GamePad.Index.Two).x, input.y);
+                input = new Vector2(Input.GetAxis("Controller2_LeftAxis"), input.y);
                 break;
             case 4:
                 if (GamePad.GetButtonDown(GamePad.Button.RightShoulder, GamePad.Index.Two))
                     input += Vector2.up;
-                input = new Vector2(GamePad.GetAxis(GamePad.Axis.RightStick, GamePad.Index.Two).x, input.y);
+                input = new Vector2(Input.GetAxis("Controller2_RightAxis"), input.y);
                 break;
         }
 
@@ -128,9 +129,11 @@ public class Racer : MonoBehaviour {
         //if (input.x == -1) currentRotation = AddVelocity(currentRotation, maxRotation, timeRotation);
         if (input.x != 0)
         {
+            //Debug.Log(input.x);
+
             int direction = 1;
             if (input.x > 0) direction = -1;
-            currentRotation = AddVelocity(currentRotation, maxRotation * currentRotation, timeRotation, direction);
+            currentRotation = AddVelocity(currentRotation, maxRotation * Mathf.Abs(input.x), timeRotation, direction);
         }
         if (input.x == 0) currentRotation = DecreaseRotation(currentRotation);
     }
@@ -146,11 +149,11 @@ public class Racer : MonoBehaviour {
         if (velocity == 0) return velocity;
 
         if(velocity > 0) {
-            velocity -= maxForwardVelocity * (1f / timeForwardVelocity) * Time.deltaTime;
+            velocity -= maxForwardVelocity * (1f / 0.75f) * Time.deltaTime;
             velocity = Mathf.Clamp(velocity, 0f, maxForwardVelocity);
         }
         else {
-            velocity += maxBackwardVelocity * (1f / timeBackwardVelocity) * Time.deltaTime;
+            velocity += maxBackwardVelocity * (1f / 0.75f) * Time.deltaTime;
             velocity = Mathf.Clamp(velocity, -maxBackwardVelocity, 0f);
         }
         
